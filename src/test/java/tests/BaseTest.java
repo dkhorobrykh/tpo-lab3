@@ -15,6 +15,7 @@ import page.GuidePage;
 import page.MainPage;
 import page.NewsPage;
 import page.OneNewsPage;
+import page.RegistrationPage;
 
 public class BaseTest {
 
@@ -26,6 +27,7 @@ public class BaseTest {
     protected DownloadPage downloadPage;
     protected GuidePage guidePage;
     protected ClanPage clanPage;
+    protected RegistrationPage registrationPage;
 
     @BeforeAll
     static void setupClass() {
@@ -57,6 +59,7 @@ public class BaseTest {
         downloadPage = new DownloadPage(driver, wait);
         guidePage = new GuidePage(driver, wait);
         clanPage = new ClanPage(driver, wait);
+        registrationPage = new RegistrationPage(driver, wait);
     }
 
     @AfterEach

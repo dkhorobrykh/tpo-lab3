@@ -3,8 +3,6 @@ package page;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -31,7 +29,7 @@ public class MainPage extends BasePage {
     private final By sectionNews = By.xpath("//div[@class='main-wrapper_content'][.//article[@style='order: 0']]");
     private final By firstNews = By.xpath("(//a[contains(@class, 'cards-news-widget_card-body__link')])[1]");
 
-    private final By showMoreNewsButton = By.xpath("//button[contains(@class, 'cards-news-widget_show-more')]");
+    private final By registrationButton = By.xpath("//a[contains(@class, 'cm-link__register')]");
 
     public List<String> getHeaderGames() {
         List<String> headerGames = new ArrayList<>();
@@ -72,12 +70,15 @@ public class MainPage extends BasePage {
         return newsList;
     }
 
-    public void showMoreNews() {
-        click(showMoreNewsButton);
-    }
-
     public void clickOnFirstNews() {
         click(firstNews);
+    }
+
+    public void clickRegistrationButton() {
+        var body = find(By.tagName("body"));
+        body.sendKeys(Keys.PAGE_DOWN);
+        body.sendKeys(Keys.PAGE_UP);
+        click(registrationButton);
     }
 
 }

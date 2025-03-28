@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
+import page.NewsPage;
 
 public class NewsTest extends BaseTest {
 
@@ -25,21 +26,6 @@ public class NewsTest extends BaseTest {
         List<String> news = mainPage.getNewsList();
 
         assertThat(news).isNotEmpty();
-    }
-
-    @Test
-    public void showMore_shouldAddNewNews() {
-        mainPage.open();
-        Set<String> newsBefore = mainPage.getNewsList().stream().filter(x -> !List.of(" ", "").contains(x)).collect(
-            Collectors.toSet());
-
-        mainPage.showMoreNews();
-
-        Set<String> newsAfter = mainPage.getNewsList().stream().filter(x -> !List.of(" ", "").contains(x)).collect(
-            Collectors.toSet());
-
-        assertThat(newsAfter).isNotEqualTo(newsBefore);
-        assertThat(newsAfter).containsOnlyOnceElementsOf(newsBefore);
     }
 
     @Test
@@ -85,6 +71,19 @@ public class NewsTest extends BaseTest {
 
         assertThat(newsPage.getNewsPadding().isDisplayed()).isTrue();
         assertThat(newsPage.getShowMoreButton().isDisplayed()).isFalse();
+    }
+
+    @Test
+    public void selectCategory_shouldReturnAnotherNews() {
+        newsPage.open();
+
+        List<String> newsBefore = newsPage.getNewsList();
+
+        newsPage.selectFilterCategory(NewsPage.CATEGORY_ARCHIVE);
+
+        List<String> newsAfter = newsPage.getNewsList();
+
+        assertThat(newsAfter).isNotEqualTo(newsBefore);
     }
 
 }

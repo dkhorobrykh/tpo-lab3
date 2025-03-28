@@ -24,4 +24,13 @@ public class MainHeaderTest extends BaseTest {
         assertThat(services).isNotEmpty();
     }
 
+    @Test
+    public void clickOnEnterButton_shouldRedirectToRegistrationPage() {
+        mainPage.open();
+        mainPage.clickRegistrationButton();
+
+        String currentUrl = driver.getCurrentUrl();
+        assertThat(currentUrl).contains(registrationPage.getURL());
+    }
+
 }
