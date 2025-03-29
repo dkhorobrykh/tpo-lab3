@@ -20,9 +20,16 @@ public abstract class BasePage {
 
     public abstract String getURL();
 
+    public By cookieButton = By.xpath("//div[contains(@class, 'ot-sdk-three ot-sdk-columns has-reject-all-button')" +
+        "]/div[1]/button[3]");
+
     public void open() {
         try {
             driver.get(getURL());
+
+            if (!driver.findElements(cookieButton).isEmpty()) {
+                driver.findElement(cookieButton).click();
+            }
         } catch (TimeoutException ignored) {
         }
     }

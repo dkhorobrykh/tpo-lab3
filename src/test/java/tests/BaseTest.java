@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import page.ClanPage;
 import page.DownloadPage;
@@ -31,26 +33,31 @@ public class BaseTest {
 
     @BeforeAll
     static void setupClass() {
-        WebDriverManager.chromedriver().setup();
+        String browser = System.getenv("BROWSER");
+        if ("firefox".equalsIgnoreCase(browser)) {
+            WebDriverManager.firefoxdriver().setup();
+        } else {
+            WebDriverManager.chromedriver().setup();
+        }
     }
 
     @BeforeEach
     void setupTest() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-gpu");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-background-networking");
-        options.addArguments("--disable-ipc-flooding-protection");
-        options.addArguments("--disable-renderer-backgrounding");
-        options.addArguments("--disable-background-timer-throttling");
-        options.addArguments("--remote-allow-origins=*");
-//        options.addArguments("--headless");
+        String browser = System.getenv("BROWSER");
+        if ("firefox".equalsIgnoreCase(browser)) {
+            FirefoxOptions options = new FirefoxOptions();
+            driver = new FirefoxDriver(options);
+        } else {
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--disable-gpu", "--no-sandbox", "--disable-dev-shm-usage",
+                "--disable-background-networking", "--disable-ipc-flooding-protection",
+                "--disable-renderer-backgrounding", "--disable-background-timer-throttling",
+                "--remote-allow-origins=*");
+            driver = new ChromeDriver(options);
+        }
 
-        driver = new ChromeDriver(options);
         driver.manage().window().maximize();
 
-        //        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(0));
         var wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         mainPage = new MainPage(driver, wait);
@@ -66,7 +73,9 @@ public class BaseTest {
     void teardown() {
         if (driver != null) {
             driver.close();
-            driver.quit();
+            try {
+                driver.quit();
+            } catch (Exception ignored) {}
         }
     }
 
